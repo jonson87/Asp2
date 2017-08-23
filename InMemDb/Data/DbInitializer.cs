@@ -23,7 +23,7 @@ namespace InMemDb.Data
             var adminUser = new ApplicationUser();
             adminUser.UserName = "admin@test.com";
             adminUser.Email = "admin@test.com";
-            var adminUserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
+            var adminUserResult = userManager.CreateAsync(adminUser, "Javisst7/").Result;
 
             userManager.AddToRoleAsync(adminUser, "Admin");
 

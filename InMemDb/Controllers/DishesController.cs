@@ -34,7 +34,7 @@ namespace InMemDb.Controllers
             }
 
             var dish = await _context.Dishes
-                .SingleOrDefaultAsync(m => m.DishID == id);
+                .SingleOrDefaultAsync(m => m.DishId == id);
             if (dish == null)
             {
                 return NotFound();
@@ -73,7 +73,7 @@ namespace InMemDb.Controllers
                 return NotFound();
             }
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishID == id);
+            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
             if (dish == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace InMemDb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DishID,Name,Price")] Dish dish)
         {
-            if (id != dish.DishID)
+            if (id != dish.DishId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace InMemDb.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DishExists(dish.DishID))
+                    if (!DishExists(dish.DishId))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace InMemDb.Controllers
             }
 
             var dish = await _context.Dishes
-                .SingleOrDefaultAsync(m => m.DishID == id);
+                .SingleOrDefaultAsync(m => m.DishId == id);
             if (dish == null)
             {
                 return NotFound();
@@ -139,7 +139,7 @@ namespace InMemDb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishID == id);
+            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
             _context.Dishes.Remove(dish);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -147,7 +147,7 @@ namespace InMemDb.Controllers
 
         private bool DishExists(int id)
         {
-            return _context.Dishes.Any(e => e.DishID == id);
+            return _context.Dishes.Any(e => e.DishId == id);
         }
     }
 }
