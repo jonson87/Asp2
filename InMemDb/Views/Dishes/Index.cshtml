@@ -1,4 +1,4 @@
-﻿@model IEnumerable<InMemDb.Models.Dish>
+﻿@model List<Dish>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,12 +12,9 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Ingredients</th>
             <th></th>
         </tr>
     </thead>
@@ -25,11 +22,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @item.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @item.Price
             </td>
+            <td>@foreach (var ing in item.DishIngredients)
+            {
+                <p>@ing.Ingredient.Name</p>
+            }</td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DishId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.DishId">Details</a> |
