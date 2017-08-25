@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InMemDb.Data;
 using InMemDb.Models;
+using Microsoft.AspNetCore.Http;
+using InMemDb.Models.DishEditViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InMemDb.Controllers
 {
@@ -46,78 +49,115 @@ namespace InMemDb.Controllers
         // GET: Dishes/Create
         public IActionResult Create()
         {
-            var ingredients = _context.Dishes.Include(di => di.DishIngredients).ThenInclude(di => di.Ingredient).ToList();
-            return View(ingredients);
+            CreateEditDishViewModel viewModel = new CreateEditDishViewModel();
+            viewModel.AllIngredients = _context.Ingredients.ToList();
+            return View(viewModel);
         }
 
         // POST: Dishes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishID,Name,Price")] Dish dish)
+        public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients")] CreateEditDishViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dish);
+                Dish createdDish = new Dish()
+                {
+                    Name = viewModel.Name,
+                    Price = viewModel.Price,
+                };
+                _context.Add(createdDish);
+
+                List<Ingredient> allIngredients = _context.Ingredients.Where(i => viewModel.AllIngredients.Where(y => y.Checked).Any(x => x.IngredientId == i.IngredientId)).ToList();
+
+                foreach (var ingredient in allIngredients)
+                {                    
+                    DishIngredient dishIngredient = new DishIngredient()
+                    {
+                        Dish = createdDish,
+                        Ingredient = ingredient
+                    };
+                    _context.DishIngredients.Add(dishIngredient);                    
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(dish);
+            return View("index", "home");
         }
 
         // GET: Dishes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.DishId == id);
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
-            if (dish == null)
+            var model = new CreateEditDishViewModel()
             {
-                return NotFound();
+                AllIngredients = _context.Ingredients.ToList(),
+                Dish = dish
+            };
+
+            foreach (var ing in dish.DishIngredients)
+            {
+                foreach (var aIng in model.AllIngredients)
+                {
+                    if (ing.IngredientId == aIng.IngredientId)
+                    {
+                        aIng.Checked = true;
+                    }
+                }
             }
-            return View(dish);
+            return View(model);
         }
 
         // POST: Dishes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishID,Name,Price")] Dish dish)
+        public async Task<IActionResult> Edit(int id, [Bind("Dish,AllIngredients")] CreateEditDishViewModel model)
         {
-            if (id != dish.DishId)
+            var dish = _context.Dishes
+                    .Include(x => x.DishIngredients)
+                    .ThenInclude(i => i.Ingredient)
+                    .SingleOrDefault(s => s.DishId == model.Dish.DishId);
+
+            //List<Ingredient> allIngredients = _context.Ingredients.ToList();
+            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked).Any(x => x.IngredientId == i.IngredientId)).ToList();
+            List<DishIngredient> dishIngredients = _context.DishIngredients.Where(x=>x.DishId == model.Dish.DishId).ToList();
+
+            foreach (var ing in dishIngredients)
             {
-                return NotFound();
+                dish.DishIngredients.Remove(ing);
+            }
+            await _context.SaveChangesAsync();
+
+            foreach (var ing in checkedIngredients)
+            {
+                var dishIng = new DishIngredient()
+                {
+                    Dish = model.Dish,
+                    DishId = model.Dish.DishId,
+                    Ingredient = ing,
+                    IngredientId = ing.IngredientId
+                };
+                _context.DishIngredients.Add(dishIng);
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(dish);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DishExists(dish.DishId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(dish);
+            dish.Name = model.Dish.Name;
+            dish.Price = model.Dish.Price;
+            _context.Entry(dish).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Dishes/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +177,7 @@ namespace InMemDb.Controllers
 
         // POST: Dishes/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

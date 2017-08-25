@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color:red;
 }
 
 /* Wrapping element */
@@ -33,3 +34,9 @@
         display: none;
     }
 }
+.navbar-minSkit {
+    background-color: red;
+    background-image: none;
+    background-repeat: no-repeat;
+}
+

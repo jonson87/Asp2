@@ -10,5 +10,6 @@ namespace InMemDb.Models
         public int IngredientId { get; set; }
         public string Name { get; set; }
         public List<DishIngredient> DishIngredients { get; set; }
+        public bool Checked { get; set; }
     }
 }

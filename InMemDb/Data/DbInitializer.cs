@@ -40,7 +40,7 @@ namespace InMemDb.Data
                 var capricciosa = new Dish { Name = "Capricciosa", Price = 79 };
                 var margaritha = new Dish { Name = "Margaritha", Price = 69 };
                 var hawaii = new Dish { Name = "Hawaii", Price = 85 };
-                var quattroFormaggi = new Dish { Name = "QuattroFormaggio", Price = 95 };
+                var quattroFormaggi = new Dish { Name = "Quattro Formaggio", Price = 95 };
 
                 var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese };
                 var capricciosaTomatoe = new DishIngredient { Dish = capricciosa, Ingredient = tomatoe };
