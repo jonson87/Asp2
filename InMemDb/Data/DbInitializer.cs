@@ -34,7 +34,7 @@ namespace InMemDb.Data
                 var ham = new Ingredient { Name = "Ham" };
                 var mozzarella = new Ingredient { Name = "Mozzarella" };
                 var parmigiano = new Ingredient { Name = "Parmigiano" };
-                var gorgonzola = new Ingredient { Name = "gorgonzola" };
+                var gorgonzola = new Ingredient { Name = "Gorgonzola" };
                 var pineapple = new Ingredient { Name = "Pineapple" };
 
                 var capricciosa = new Dish { Name = "Capricciosa", Price = 79 };

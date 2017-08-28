@@ -11,6 +11,7 @@ namespace InMemDb.Models
         public string Name { get; set; }
         public int Price { get; set; }
         public List<DishIngredient> DishIngredients { get; set; }
+        //public Category Category { get; set; }
         //public List<OrderDish> OrderDishes { get; set; }
     }
 }
