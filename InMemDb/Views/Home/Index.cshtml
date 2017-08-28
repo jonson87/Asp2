@@ -1,34 +1,38 @@
-﻿@model List<Dish>
+﻿@model List<Category>
 
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@foreach (var item in Model)
+{
 <table class="table">
     <thead>
+        <h3>@item.Name</h3>
         <tr>
             <th>Name</th>
             <th>Price</th>
             <th>Ingredients</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <tbody>        
+            @foreach (var dish in item.Dishes)
+            {
             <tr>
                 <td>
-                    @item.Name
+                    @dish.Name
                 </td>
                 <td>
-                    @item.Price
+                    @dish.Price
                 </td>
                 <td>
-                    @foreach (var ing in item.DishIngredients)
-                {
+                    @foreach (var ing in dish.DishIngredients)
+                    {
                     <p>@ing.Ingredient.Name</p>
-                }
+                    }
             </td>            
         </tr>
-        }
+            }
+            
     </tbody>
 </table>
+}

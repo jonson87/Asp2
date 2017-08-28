@@ -33,14 +33,59 @@ namespace InMemDb.Data
                 var tomatoe = new Ingredient { Name = "Tomatoe" };
                 var ham = new Ingredient { Name = "Ham" };
                 var mozzarella = new Ingredient { Name = "Mozzarella" };
-                var parmigiano = new Ingredient { Name = "Parmigiano" };
                 var gorgonzola = new Ingredient { Name = "Gorgonzola" };
                 var pineapple = new Ingredient { Name = "Pineapple" };
+                var lettuce = new Ingredient { Name = "Lettuce" };
+                var olives = new Ingredient { Name = "Olives" };
+                var chicken = new Ingredient { Name = "Chicken" };
+                var feta = new Ingredient { Name = "Feta" };
+                var ruccola = new Ingredient { Name = "Ruccola" };
+                var parmigiano = new Ingredient { Name = "Parmigiano" };
+                var tuna = new Ingredient { Name = "Tuna" };
+                var meat = new Ingredient { Name = "Meat" };
+                var cream = new Ingredient { Name = "Cream" };
+                var onion = new Ingredient { Name = "Onion" };
+                var bacon = new Ingredient { Name = "Bacon" };
 
-                var capricciosa = new Dish { Name = "Capricciosa", Price = 79 };
-                var margaritha = new Dish { Name = "Margaritha", Price = 69 };
-                var hawaii = new Dish { Name = "Hawaii", Price = 85 };
-                var quattroFormaggi = new Dish { Name = "Quattro Formaggio", Price = 95 };
+                var categoryPizza = new Category { Name = "Pizza" };
+                var categorySalad = new Category { Name = "Salad" };
+                var categoryPasta = new Category { Name = "Pasta" };
+
+                var carbonara = new Dish { Name = "Carbonara", Price = 89, Category = categoryPasta };
+                var lasagne = new Dish { Name = "Lasagne", Price = 95, Category = categoryPasta };
+                var pastaConTono = new Dish { Name = "Pasta Con Tono", Price = 92, Category = categoryPasta };
+                var capricciosa = new Dish { Name = "Capricciosa", Price = 79, Category = categoryPizza };
+                var margaritha = new Dish { Name = "Margaritha", Price = 69, Category = categoryPizza };
+                var hawaii = new Dish { Name = "Hawaii", Price = 85, Category = categoryPizza };
+                var quattroFormaggi = new Dish { Name = "Quattro Formaggio", Price = 95, Category = categoryPizza };
+                var greekSalad = new Dish { Name = "Greek Salad", Price = 89, Category = categorySalad };
+                var dietSalad = new Dish { Name = "Slim Salad", Price = 29, Category = categorySalad };
+
+                var carbonaraCheese = new DishIngredient { Dish = carbonara, Ingredient = tomatoe };
+                var carbonaraCream = new DishIngredient { Dish = carbonara, Ingredient = cream };
+                var carbonaraBacon = new DishIngredient { Dish = carbonara, Ingredient = bacon };
+                var lasagneCheese = new DishIngredient { Dish = lasagne, Ingredient = cheese };
+                var lasagneCream = new DishIngredient { Dish = lasagne, Ingredient = cream };
+                var lasagneMeat = new DishIngredient { Dish = lasagne, Ingredient = meat };
+                var pastaConTonoTomatoSauce = new DishIngredient { Dish = pastaConTono, Ingredient = tomatoe };
+                var pastaConTonoTuna = new DishIngredient { Dish = pastaConTono, Ingredient = tuna };
+                var pastaConTonoOnion = new DishIngredient { Dish = pastaConTono, Ingredient = onion };
+
+                var dietSaladRuccola = new DishIngredient { Dish = dietSalad, Ingredient = ruccola };
+                var dietSaladParmigiano = new DishIngredient { Dish = dietSalad, Ingredient = parmigiano };
+                dietSalad.DishIngredients = new List<DishIngredient>();
+                dietSalad.DishIngredients.Add(dietSaladRuccola);
+                dietSalad.DishIngredients.Add(dietSaladParmigiano);
+
+                var greekSaladLettuce = new DishIngredient { Dish = greekSalad, Ingredient = lettuce };
+                var greekSaladOlives = new DishIngredient { Dish = greekSalad, Ingredient = olives };
+                var greekSaladChicken = new DishIngredient { Dish = greekSalad, Ingredient = chicken };
+                var greekSaladFeta = new DishIngredient { Dish = greekSalad, Ingredient = feta };
+                greekSalad.DishIngredients = new List<DishIngredient>();
+                greekSalad.DishIngredients.Add(greekSaladLettuce);
+                greekSalad.DishIngredients.Add(greekSaladOlives);
+                greekSalad.DishIngredients.Add(greekSaladChicken);
+                greekSalad.DishIngredients.Add(greekSaladFeta);
 
                 var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese };
                 var capricciosaTomatoe = new DishIngredient { Dish = capricciosa, Ingredient = tomatoe };
@@ -78,9 +123,14 @@ namespace InMemDb.Data
                 context.Dishes.Add(margaritha);
                 context.Dishes.Add(quattroFormaggi);
                 context.Dishes.Add(hawaii);
+                context.Dishes.Add(greekSalad);
+                context.Dishes.Add(dietSalad);
+                context.Dishes.Add(carbonara);
+                context.Dishes.Add(lasagne);
+                context.Dishes.Add(pastaConTono);
+
                 context.SaveChanges();
             }
-
         }
     }
 }

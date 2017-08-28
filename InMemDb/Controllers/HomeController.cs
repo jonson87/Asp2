@@ -21,9 +21,11 @@ namespace InMemDb.Controllers
 
         public IActionResult Index()
         {
+            var category = _context.Categories.Include(x => x.Dishes).ThenInclude(x => x.DishIngredients).ThenInclude(x=>x.Ingredient).ToList();
+
             var dishes = _context.Dishes.Include(d => d.DishIngredients).ThenInclude(d => d.Ingredient).ToList();
 
-            return View(dishes);
+            return View(category);
         }
 
         public IActionResult About()
