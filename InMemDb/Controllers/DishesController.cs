@@ -51,6 +51,7 @@ namespace InMemDb.Controllers
         {
             CreateEditDishViewModel viewModel = new CreateEditDishViewModel();
             viewModel.AllIngredients = _context.Ingredients.ToList();
+            viewModel.AllCategories = _context.Categories.ToList();
             return View(viewModel);
         }
 
@@ -60,7 +61,7 @@ namespace InMemDb.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients")] CreateEditDishViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients, Category")] CreateEditDishViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +69,7 @@ namespace InMemDb.Controllers
                 {
                     Name = viewModel.Name,
                     Price = viewModel.Price,
+                    CategoryId = viewModel.Category.CategoryId
                 };
                 _context.Add(createdDish);
 

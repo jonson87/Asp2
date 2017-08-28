@@ -77,6 +77,10 @@ namespace InMemDb.Data
                 dietSalad.DishIngredients.Add(dietSaladRuccola);
                 dietSalad.DishIngredients.Add(dietSaladParmigiano);
 
+                context.DishIngredients.AddRange(carbonaraCheese, carbonaraCream, carbonaraBacon,
+                    lasagneCheese, lasagneCream, lasagneMeat,
+                    pastaConTonoTuna, pastaConTonoTomatoSauce, pastaConTonoOnion);
+                
                 var greekSaladLettuce = new DishIngredient { Dish = greekSalad, Ingredient = lettuce };
                 var greekSaladOlives = new DishIngredient { Dish = greekSalad, Ingredient = olives };
                 var greekSaladChicken = new DishIngredient { Dish = greekSalad, Ingredient = chicken };

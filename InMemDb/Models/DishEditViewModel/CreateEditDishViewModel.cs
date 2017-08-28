@@ -12,5 +12,7 @@ namespace InMemDb.Models.DishEditViewModel
         public int Price { get; set; }
         public Dish Dish { get; set; }
         public List<Ingredient> AllIngredients { get; set; }
+        public Category Category { get; set; }
+        public List<Category> AllCategories { get; set; }
     }
 }
