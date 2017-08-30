@@ -7,6 +7,6 @@ namespace InMemDb.Services
 {
     public class IngredientService
     {
-
+        
     }
 }

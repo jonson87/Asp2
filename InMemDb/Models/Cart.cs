@@ -8,7 +8,7 @@ namespace InMemDb.Models
     public class Cart
     {
         public int CartId { get; set; }
-        public int PersonId { get; set; }
+        public string PersonId { get; set; }
         public List<CartItem> CartItem { get; set; }
     }
 }

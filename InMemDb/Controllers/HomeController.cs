@@ -24,6 +24,7 @@ namespace InMemDb.Controllers
             var category = _context.Categories.Include(x => x.Dishes).ThenInclude(x => x.DishIngredients).ThenInclude(x=>x.Ingredient).ToList();
 
             var dishes = _context.Dishes.Include(d => d.DishIngredients).ThenInclude(d => d.Ingredient).ToList();
+            //var ordered = dishes.OrderBy(x => x.DishIngredients.Select(y => y.Ingredient.Name));
 
             return View(category);
         }

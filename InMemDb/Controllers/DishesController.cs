@@ -50,8 +50,8 @@ namespace InMemDb.Controllers
         public IActionResult Create()
         {
             CreateEditDishViewModel viewModel = new CreateEditDishViewModel();
-            viewModel.AllIngredients = _context.Ingredients.ToList();
-            viewModel.AllCategories = _context.Categories.ToList();
+            viewModel.AllIngredients = _context.Ingredients.OrderBy(x=>x.Name).ToList();
+            viewModel.AllCategories = _context.Categories.OrderBy(x=>x.Name).ToList();
             return View(viewModel);
         }
 
@@ -62,7 +62,7 @@ namespace InMemDb.Controllers
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients, Category")] CreateEditDishViewModel viewModel)
-        {
+         {
             if (ModelState.IsValid)
             {
                 Dish createdDish = new Dish()

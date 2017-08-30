@@ -25,11 +25,14 @@
                     @dish.Price
                 </td>
                 <td>
-                    @foreach (var ing in dish.DishIngredients)
+                    @foreach (var ing in dish.DishIngredients.OrderBy(x=>x.Ingredient.Name))
                     {
                     <p>@ing.Ingredient.Name</p>
                     }
-            </td>            
+                </td>
+                <td><a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
+                    <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span></a>                    
+                    </td>
         </tr>
             }
             

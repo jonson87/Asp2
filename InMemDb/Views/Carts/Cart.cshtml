@@ -1,0 +1,38 @@
+﻿@model InMemDb.Models.Cart
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<table class="table">
+    <thead>
+        <h3>Cart</h3>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Ingredients</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItem)
+            {
+            <tr>
+                <td>
+                    @item.Dish.Name
+                </td>
+                <td>
+                    @item.Dish.Price
+                </td>
+                <td>
+                    @foreach (var ing in item.CartItemIngredient.OrderBy(x => x.Ingredient.Name))
+                    {
+                        <p>@ing.Ingredient.Name</p>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
