@@ -3,36 +3,40 @@
     ViewData["Title"] = "Cart";
 }
 
-<table class="table">
-    <thead>
-        <h3>Cart</h3>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Ingredients</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CartItem)
-            {
+<div class="container">
+    <table class="table">
+        <thead>
+            <h3>Your Cart</h3>
             <tr>
-                <td>
-                    @item.Dish.Name
-                </td>
-                <td>
-                    @item.Dish.Price
-                </td>
-                <td>
-                    @foreach (var ing in item.CartItemIngredient.OrderBy(x => x.Ingredient.Name))
-                    {
-                        <p>@ing.Ingredient.Name</p>
-                    }
-                </td>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Ingredients</th>
             </tr>
-        }
-
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItem)
+            {
+                <tr>
+                    <td>
+                        @item.DishName
+                    </td>
+                    <td>
+                        @item.DishPrice
+                    </td>
+                    <td>
+                        @foreach (var ing in item.CartItemIngredient)
+                        {
+                            <p>@ing.Ingredient.Name</p>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="EditCartItemIngredients" asp-route-cartItemId="@item.CartItemId">Add or Remove Ingredients</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
 

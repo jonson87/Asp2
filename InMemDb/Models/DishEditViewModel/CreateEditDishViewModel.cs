@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace InMemDb.Models.DishEditViewModel
 {
     public class CreateEditDishViewModel
-    {           
+    {
+        public int CartItemId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public Dish Dish { get; set; }

@@ -9,6 +9,7 @@ using InMemDb.Data;
 using InMemDb.Models;
 using InMemDb.Services;
 using Microsoft.AspNetCore.Http;
+using InMemDb.Models.CartEditViewModel;
 
 namespace InMemDb.Controllers
 {
@@ -28,8 +29,7 @@ namespace InMemDb.Controllers
         public async Task<IActionResult> Cart(int dishId)
         {
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
-            var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).FirstOrDefault(x => x.CartId == cartId);
-            //var cart = new Cart();
+            var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.CartId == cartId);
             return View(cart);
         }
 
@@ -55,7 +55,8 @@ namespace InMemDb.Controllers
                     cartItemIngredients.Add(cartItemIngredient);
                 }
 
-                cartItem.Dish = dish;
+                cartItem.DishName = dish.Name;
+                cartItem.DishPrice = dish.Price;
                 cartItem.Quantity = 1;
                 cartItem.CartItemIngredient = cartItemIngredients;
                 cartItem.CartId = userCart.CartId;
@@ -88,7 +89,8 @@ namespace InMemDb.Controllers
                     cartItemIngredients.Add(cartItemIngredient);
                 }
 
-                cartItem.Dish = dish;
+                cartItem.DishName = dish.Name;
+                cartItem.DishPrice = dish.Price;
                 cartItem.Quantity = 1;
                 cartItem.CartItemIngredient = cartItemIngredients;
                 cartItem.CartId = cart.CartId;
@@ -100,6 +102,55 @@ namespace InMemDb.Controllers
                 //var cart = await _cartService.AddToExistingCart(dishId, cartId.ToString());
             }
 
+            return RedirectToAction("Cart");
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditCartItemIngredients(int cartItemId)
+        {
+            var viewModel = new EditCartViewModel();
+            //var cartId = (int)HttpContext.Session.GetInt32("Cart");
+            var cartItem = _context.CartItems.Include(x => x.CartItemIngredient).FirstOrDefault(x => x.CartItemId == cartItemId);
+            viewModel.CartItem = cartItem;
+            viewModel.AllIngredients = _context.Ingredients.ToList();
+
+            foreach (var ing in cartItem.CartItemIngredient)
+            {
+                foreach (var aIng in viewModel.AllIngredients)
+                {
+                    if (ing.IngredientId == aIng.IngredientId)
+                    {
+                        aIng.Checked = true;
+                    }
+                }
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCartItemIngredients(EditCartViewModel model)
+        {
+
+            foreach (var cii in _context.CartItemIngredients.Where(x=>x.CartItemId == model.CartItemId))
+            {
+                 _context.Remove(cii);
+            }
+            await _context.SaveChangesAsync();
+
+            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked).Any(x => x.IngredientId == i.IngredientId)).ToList();
+
+            foreach (var ing in checkedIngredients)
+            {
+                var cartItemIngredient = new CartItemIngredient()
+                {
+                    Ingredient = ing,
+                    IngredientId = ing.IngredientId,
+                    CartItem = model.CartItem,
+                    CartItemId = model.CartItemId
+                };
+                _context.CartItemIngredients.Add(cartItemIngredient);
+            }
+            await _context.SaveChangesAsync();
             return RedirectToAction("Cart");
         }
     }

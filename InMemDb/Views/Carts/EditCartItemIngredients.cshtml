@@ -1,0 +1,39 @@
+﻿@model InMemDb.Models.CartEditViewModel.EditCartViewModel
+
+@{
+    ViewData["Title"] = "EditCartItemIngredients";
+}
+
+<h2>Add or Remove Ingredients</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCartItemIngredients">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CartItemId" />
+            @*<div class="form-group">
+                <label asp-for="CartItem." class="control-label"></label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CartItem.DishPrice" class="control-label"></label>
+            </div>*@
+            <div class="form-group">
+                @{
+                    for (int i = 0; i < Model.AllIngredients.Count; i++)
+                    {
+                        <div class="checkbox">
+                            <input asp-for="@Model.AllIngredients[i].Checked" type="checkbox" />
+                            <label asp-for="@Model.AllIngredients[i]">@Model.AllIngredients[i].Name</label>
+                            <input asp-for="@Model.AllIngredients[i].IngredientId" type="hidden" />
+                            <input asp-for="@Model.AllIngredients[i].Name" type="hidden" />
+                        </div>
+                    }
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -94,7 +94,6 @@ namespace InMemDb.Controllers
         // GET: Dishes/Edit/5
         public IActionResult Edit(int? id)
         {
-
             var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.DishId == id);
 
             var model = new CreateEditDishViewModel()
