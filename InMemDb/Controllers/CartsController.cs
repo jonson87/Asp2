@@ -10,6 +10,7 @@ using InMemDb.Models;
 using InMemDb.Services;
 using Microsoft.AspNetCore.Http;
 using InMemDb.Models.CartEditViewModel;
+using InMemDb.Models.CheckOutViewModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace InMemDb.Controllers
@@ -179,14 +180,20 @@ namespace InMemDb.Controllers
             await _context.SaveChangesAsync();
 
             return View("Cart");
-           
         }
 
-        public async Task<IActionResult> Checkout(int cartId)
-        {
+        //public ActionResult CartSummary()
+        //{
+        //    var cartId = HttpContext.Session.GetInt32("Cart");
+        //    var cart = _context.Carts.Include(x => x.CartItem).FirstOrDefault(x => x.CartId == cartId);
+        //    int dishCount = 0;
+        //    foreach (var dish in cart.CartItem)
+        //    {
+        //        dishCount++;
+        //    }
 
-
-            return null;
-        }
+        //    ViewData["CartCount"] = dishCount;
+        //    return PartialView("CartSummary");
+        //}
     }
 }

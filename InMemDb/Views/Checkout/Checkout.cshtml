@@ -1,0 +1,50 @@
+﻿@model InMemDb.Models.CheckOutViewModel.CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <h4>Delivery and payment.</h4>
+            <hr />
+            <h4>Enter your delivery address</h4>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="User.Firstname"></label>
+                <input asp-for="User.Firstname" class="form-control" />
+                <span asp-validation-for="User.Firstname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Lastname"></label>
+                <input asp-for="User.Lastname" class="form-control" />
+                <span asp-validation-for="User.Lastname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.ZipCode"></label>
+                <input asp-for="User.ZipCode" class="form-control" />
+                <span asp-validation-for="User.ZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.City"></label>
+                <input asp-for="User.City" class="form-control" />
+                <span asp-validation-for="User.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Street"></label>
+                <input asp-for="User.Street" class="form-control" />
+                <span asp-validation-for="User.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Email"></label>
+                <input asp-for="User.Email" class="form-control" />
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Pay</button>
+        </form>
+    </div>
+</div>
+
+
+

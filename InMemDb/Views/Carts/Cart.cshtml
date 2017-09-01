@@ -3,13 +3,12 @@
     ViewData["Title"] = "Cart";
 }
 
-
 <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">Your Cart</h3>
     </div>
     <div class="panel-body">
-        <a asp-action="Checkout" asp-route-cartId="@Model.CartId"></a>
+        <a asp-action="Checkout" asp-controller="Checkout"></a>
         <table class="table">
             <thead>
                 <tr>
