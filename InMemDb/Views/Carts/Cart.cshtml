@@ -3,40 +3,50 @@
     ViewData["Title"] = "Cart";
 }
 
-<div class="container">
-    <table class="table">
-        <thead>
-            <h3>Your Cart</h3>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Ingredients</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItem)
-            {
-                <tr>
-                    <td>
-                        @item.DishName
-                    </td>
-                    <td>
-                        @item.DishPrice
-                    </td>
-                    <td>
-                        @foreach (var ing in item.CartItemIngredient)
-                        {
-                            <p>@ing.Ingredient.Name</p>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="EditCartItemIngredients" asp-route-cartItemId="@item.CartItemId">Add or Remove Ingredients</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
 
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Your Cart</h3>
+    </div>
+    <div class="panel-body">
+        <a asp-action="Checkout" asp-route-cartId="@Model.CartId"></a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Ingredients</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItem)
+            {
+                    <tr>
+                        <td>
+                            @item.DishName
+                        </td>
+                        <td>
+                            @item.DishPrice
+                        </td>
+                        <td>
+                            @foreach (var ing in item.CartItemIngredient)
+                            {
+                                <p>@ing.Ingredient.Name</p>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditCartItemIngredients" asp-route-cartItemId="@item.CartItemId">
+                                <span aria-hidden="true" class="glyphicon glyphicon-edit"> Edit ingredients</span>
+                            </a><br />
+                            <a asp-action="DeleteCartItem" asp-route-cartItemId="@item.CartItemId">
+                                <span aria-hidden="true" class="glyphicon glyphicon-trash"> Remove from cart</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 

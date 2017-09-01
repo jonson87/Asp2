@@ -3,39 +3,48 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+
 @foreach (var item in Model)
 {
-<table class="table">
-    <thead>
-        <h3>@item.Name</h3>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Ingredients</th>
-        </tr>
-    </thead>
-    <tbody>        
-            @foreach (var dish in item.Dishes)
-            {
-            <tr>
-                <td>
-                    @dish.Name
-                </td>
-                <td>
-                    @dish.Price
-                </td>
-                <td>
-                    @foreach (var ing in dish.DishIngredients.OrderBy(x=>x.Ingredient.Name))
-                    {
-                    <p>@ing.Ingredient.Name</p>
-                    }
-                </td>
-                <td><a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
-                    <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span></a>                    
-                    </td>
-        </tr>
-            }
-            
-    </tbody>
-</table>
+
+    <div class="container col-md-10 col-md-offset-1">
+        <table class="table">
+            <thead>
+                <h3>@item.Name</h3>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Ingredients</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dish in item.Dishes)
+                {
+                    <tr>
+                        <td>
+                            @dish.Name
+                        </td>
+                        <td>
+                            @dish.Price
+                        </td>
+                        <td>
+                            @foreach (var ing in dish.DishIngredients.OrderBy(x => x.Ingredient.Name))
+                            {
+                                <p>@ing.Ingredient.Name</p>
+                            }
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Add to cart", "AddToCart", "Carts", new { dishId = dish.DishId})*@
+
+
+                            <a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
+                                <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
 }

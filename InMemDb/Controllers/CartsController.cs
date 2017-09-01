@@ -10,17 +10,25 @@ using InMemDb.Models;
 using InMemDb.Services;
 using Microsoft.AspNetCore.Http;
 using InMemDb.Models.CartEditViewModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace InMemDb.Controllers
 {
     public class CartsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        //private readonly ApplicationUser _applicationUser;
+        //private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly SignInManager<ApplicationUser> _signInManager;
+        //private readonly UserManager userManager;
         //private readonly ICartService _cartService;
 
         public CartsController(ApplicationDbContext context)
         {
             _context = context;
+            //_applicationUser = applicationUser;
+            //_userManager = userManager;
+            //_signInManager = signInManager;
             //_cartService = cartService;
             //_applicationUser = ApplicationUser;
         }
@@ -101,9 +109,9 @@ namespace InMemDb.Controllers
 
                 //var cart = await _cartService.AddToExistingCart(dishId, cartId.ToString());
             }
-
-            return RedirectToAction("Cart");
+            return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         public async Task<IActionResult> EditCartItemIngredients(int cartItemId)
         {
@@ -152,6 +160,33 @@ namespace InMemDb.Controllers
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Cart");
+        }
+
+        public async Task<IActionResult> DeleteCartItem(int cartItemId)
+        {
+            if (cartItemId == 0)
+            {
+                return NotFound();
+            }
+
+            var cartItem = await _context.CartItems
+                .SingleOrDefaultAsync(m => m.CartItemId == cartItemId);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+
+            return View("Cart");
+           
+        }
+
+        public async Task<IActionResult> Checkout(int cartId)
+        {
+
+
+            return null;
         }
     }
 }
