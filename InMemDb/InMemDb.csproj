@@ -3,11 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-InMemDb-864C2BEA-D32A-4334-8885-76BDE9D1E9C0</UserSecretsId>
+    <Configurations>Debug;Release;Local IIS;IIS</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LocalIIS|AnyCPU'">
+    <DefineConstants>TRACE;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>

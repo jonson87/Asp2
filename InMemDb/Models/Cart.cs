@@ -10,5 +10,6 @@ namespace InMemDb.Models
         public int CartId { get; set; }
         public string PersonId { get; set; }
         public List<CartItem> CartItem { get; set; }
+        public int CartTotal { get; set; }
     }
 }

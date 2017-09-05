@@ -9,7 +9,7 @@
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <h4>Delivery and payment.</h4>
             <hr />
-            <h4>Enter your delivery address</h4>
+            <h3>Enter your delivery address</h3>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="User.Firstname"></label>
@@ -40,6 +40,23 @@
                 <label asp-for="User.Email"></label>
                 <input asp-for="User.Email" class="form-control" />
                 <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <h3>Card information</h3>
+            <div class="form-group">
+                <label asp-for="CreditCard.Name"></label>
+                <input asp-for="CreditCard.Name" class="form-control" />
+                <span asp-validation-for="CreditCard.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreditCard.CardNumber"></label>
+                <input asp-for="CreditCard.CardNumber" class="form-control" />
+                <span asp-validation-for="CreditCard.CardNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CreditCard.Cvv"></label>
+                <input asp-for="CreditCard.Cvv" class="form-control" />
+                <span asp-validation-for="CreditCard.Cvv" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Pay</button>
         </form>

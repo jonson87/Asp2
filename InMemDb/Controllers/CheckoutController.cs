@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using InMemDb.Data;
 using InMemDb.Models;
 using InMemDb.Models.CheckOutViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,37 +16,30 @@ namespace InMemDb.Controllers
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ApplicationUser _applicationUser;
+        //private readonly ApplicationUser _applicationUser;
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
-        //private readonly UserManager userManager;
-        //private readonly ICartService _cartService;
 
-        public CheckoutController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ApplicationUser applicationUser)
+        public CheckoutController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _applicationUser = applicationUser;
             _userManager = userManager;
-            //_signInManager = signInManager;
-            //_cartService = cartService;
-            //_applicationUser = ApplicationUser;
         }
 
         [HttpGet]
+        //[Authorize(Roles = "User")]
         public async Task<IActionResult> Checkout()
         {
             var cartId = HttpContext.Session.GetInt32("Cart");
 
             var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).FirstOrDefault(x => x.CartId == cartId);
-            CheckoutViewModel checkoutViewModel = new CheckoutViewModel();
-            if (_applicationUser == null)
+            var checkoutViewModel = new CheckoutViewModel();
+            if (await _userManager.GetUserAsync(User) == null)
             {
-
                 checkoutViewModel.Cart = cart;
                 return View(checkoutViewModel);
             }
             checkoutViewModel.User = await _userManager.GetUserAsync(User);
-            ;
+            
             checkoutViewModel.Cart = cart;
             return View(checkoutViewModel);
         }

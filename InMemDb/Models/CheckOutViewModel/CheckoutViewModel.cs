@@ -9,5 +9,6 @@ namespace InMemDb.Models.CheckOutViewModel
     {
         public Cart Cart { get; set; }
         public ApplicationUser User { get; set; }
+        public CreditCard CreditCard { get; set; }
     }
 }

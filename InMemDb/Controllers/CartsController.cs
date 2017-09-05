@@ -37,8 +37,14 @@ namespace InMemDb.Controllers
         // GET: Carts
         public async Task<IActionResult> Cart(int dishId)
         {
+            var total = 0;
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
             var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.CartId == cartId);
+            foreach (var item in cart.CartItem)
+            {
+                total += item.DishPrice;
+            }
+            cart.CartTotal = total;
             return View(cart);
         }
 
@@ -139,7 +145,6 @@ namespace InMemDb.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCartItemIngredients(EditCartViewModel model)
         {
-
             foreach (var cii in _context.CartItemIngredients.Where(x=>x.CartItemId == model.CartItemId))
             {
                  _context.Remove(cii);
@@ -181,19 +186,5 @@ namespace InMemDb.Controllers
 
             return View("Cart");
         }
-
-        //public ActionResult CartSummary()
-        //{
-        //    var cartId = HttpContext.Session.GetInt32("Cart");
-        //    var cart = _context.Carts.Include(x => x.CartItem).FirstOrDefault(x => x.CartId == cartId);
-        //    int dishCount = 0;
-        //    foreach (var dish in cart.CartItem)
-        //    {
-        //        dishCount++;
-        //    }
-
-        //    ViewData["CartCount"] = dishCount;
-        //    return PartialView("CartSummary");
-        //}
     }
 }
