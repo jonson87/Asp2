@@ -27,6 +27,7 @@ namespace BennysPizza.UnitTests
 
             _serviceProvider = services.BuildServiceProvider();
         }
+
         [Fact]
         public void All_Are_Sorted()
         {

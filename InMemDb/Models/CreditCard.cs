@@ -12,19 +12,22 @@ namespace InMemDb.Models
         [Required]
         [DisplayName("Name On Card")]
         public string Name { get; set; }
+
         [Required]
         [DisplayName("Card Number")]
         [DataType(DataType.CreditCard)]
-        public int CardNumber { get; set; }
+        [StringLength(16, MinimumLength =16, ErrorMessage ="Must be 16 digits")]
+        public string CardNumber { get; set; }
+
         [Required]
         [DisplayName("Expiration Date")]
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{y}")]
         public DateTime ExpirationDate { get; set; }
-        //[Required]
-        //[DisplayName("Expiration Date")]
-        //public DateTime ExpirationDateYyyy { get; set; }
+
         [Required]
         [DisplayName("Card CVV")]
-        public int Cvv { get; set; }
-
+        [StringLength(3, MinimumLength =3, ErrorMessage ="Must be 3 digits")]
+        public string Cvv { get; set; }
     }
 }

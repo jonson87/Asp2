@@ -16,7 +16,6 @@ namespace InMemDb.Controllers
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private readonly ApplicationUser _applicationUser;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public CheckoutController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -47,16 +46,20 @@ namespace InMemDb.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutViewModel checkoutViewModel)
         {
-            var order = new Order()
+            //var cartId = HttpContext.Session.GetInt32("Cart");
+            if (ModelState.IsValid)
             {
-                Cart = checkoutViewModel.Cart,
-                User = checkoutViewModel.User,
-                TimeOfOrder = DateTime.Now,
-            };
-            
+                var order = new Order()
+                {
+                    Cart = _context.Carts.FirstOrDefault(x=>x.CartId == checkoutViewModel.Cart.CartId),
+                    User = checkoutViewModel.User,
+                    TimeOfOrder = DateTime.Now,
+                };
 
-
-            return null;
+                await _context.AddAsync(order);
+                await _context.SaveChangesAsync();
+            }
+            return View();
         }
     }
 }
