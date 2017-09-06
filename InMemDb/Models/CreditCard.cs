@@ -18,7 +18,10 @@ namespace InMemDb.Models
         public int CardNumber { get; set; }
         [Required]
         [DisplayName("Expiration Date")]
-        public int ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        //[Required]
+        //[DisplayName("Expiration Date")]
+        //public DateTime ExpirationDateYyyy { get; set; }
         [Required]
         [DisplayName("Card CVV")]
         public int Cvv { get; set; }

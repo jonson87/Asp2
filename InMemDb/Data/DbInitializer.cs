@@ -29,23 +29,23 @@ namespace InMemDb.Data
 
             if (context.Dishes.ToList().Count == 0)
             {
-                var cheese = new Ingredient { Name = "Cheese" };
-                var tomatoe = new Ingredient { Name = "Tomatoe" };
-                var ham = new Ingredient { Name = "Ham" };
-                var mozzarella = new Ingredient { Name = "Mozzarella" };
-                var gorgonzola = new Ingredient { Name = "Gorgonzola" };
-                var pineapple = new Ingredient { Name = "Pineapple" };
-                var lettuce = new Ingredient { Name = "Lettuce" };
-                var olives = new Ingredient { Name = "Olives" };
-                var chicken = new Ingredient { Name = "Chicken" };
-                var feta = new Ingredient { Name = "Feta" };
-                var ruccola = new Ingredient { Name = "Ruccola" };
-                var parmigiano = new Ingredient { Name = "Parmigiano" };
-                var tuna = new Ingredient { Name = "Tuna" };
-                var meat = new Ingredient { Name = "Meat" };
-                var cream = new Ingredient { Name = "Cream" };
-                var onion = new Ingredient { Name = "Onion" };
-                var bacon = new Ingredient { Name = "Bacon" };
+                var cheese = new Ingredient { Name = "Cheese", IngredientPrice=5 };
+                var tomatoe = new Ingredient { Name = "Tomatoe", IngredientPrice = 5 };
+                var ham = new Ingredient { Name = "Ham", IngredientPrice = 5 };
+                var mozzarella = new Ingredient { Name = "Mozzarella", IngredientPrice = 5 };
+                var gorgonzola = new Ingredient { Name = "Gorgonzola", IngredientPrice = 5 };
+                var pineapple = new Ingredient { Name = "Pineapple", IngredientPrice = 5 };
+                var lettuce = new Ingredient { Name = "Lettuce", IngredientPrice = 5 };
+                var olives = new Ingredient { Name = "Olives", IngredientPrice = 5 };
+                var chicken = new Ingredient { Name = "Chicken", IngredientPrice = 15 };
+                var feta = new Ingredient { Name = "Feta", IngredientPrice = 5 };
+                var ruccola = new Ingredient { Name = "Ruccola", IngredientPrice = 5 };
+                var parmigiano = new Ingredient { Name = "Parmigiano", IngredientPrice = 5 };
+                var tuna = new Ingredient { Name = "Tuna", IngredientPrice = 10 };
+                var meat = new Ingredient { Name = "Meat", IngredientPrice = 15 };
+                var cream = new Ingredient { Name = "Cream", IngredientPrice = 5 };
+                var onion = new Ingredient { Name = "Onion", IngredientPrice = 5 };
+                var bacon = new Ingredient { Name = "Bacon", IngredientPrice = 10 };
 
                 var categoryPizza = new Category { Name = "Pizza" };
                 var categorySalad = new Category { Name = "Salad" };

@@ -47,6 +47,14 @@ namespace InMemDb.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutViewModel checkoutViewModel)
         {
+            var order = new Order()
+            {
+                Cart = checkoutViewModel.Cart,
+                User = checkoutViewModel.User,
+                TimeOfOrder = DateTime.Now,
+            };
+            
+
 
             return null;
         }
