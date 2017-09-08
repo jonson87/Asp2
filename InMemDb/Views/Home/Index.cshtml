@@ -8,7 +8,29 @@
         <h1>Bennys Italian Pizza</h1>
     </div>
 
-    @foreach (var item in Model)
+@foreach (var cat in Model)
+{
+    <div class="container col-md-11 col-md-offset-1">
+        <h3>@cat.Name</h3>
+        @foreach (var dish in cat.Dishes)
+        {
+            <div class="col-sm-4" style="width: 25%; display: inline-block">
+                <h4>@dish.Name</h4>
+                <p>@dish.Price:-</p>
+                @foreach (var ing in dish.DishIngredients.OrderBy(x => x.Ingredient.Name))
+                {
+                    <p>@ing.Ingredient.Name</p>
+                }
+                <a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
+                    <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span>
+                </a>
+            </div>
+        }
+    </div>
+
+}
+
+@*@foreach (var item in Model)
     {
         <div class="container col-md-11 col-md-offset-1">
             <table class="table">
@@ -37,10 +59,10 @@
                                 }
                             </td>
                             <td>
-                                @*@Html.ActionLink("Add to cart", "AddToCart", "Carts", new { dishId = dish.DishId})*@
+                                @Html.ActionLink("Add to cart", "AddToCart", "Carts", new { dishId = dish.DishId})
 
 
-                                <a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
+                                @*<a asp-controller="Carts" asp-action="AddToCart" asp-route-dishId="@dish.DishId">
                                     <span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span>
                                 </a>
                             </td>
@@ -50,4 +72,4 @@
                 </tbody>
             </table>
         </div>
-    }
+    }*@
