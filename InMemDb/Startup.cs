@@ -44,7 +44,7 @@ namespace InMemDb
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-            //services.AddTransient<ICartService, CartService>(); 
+            services.AddTransient<ICartService, CartService>();
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
 

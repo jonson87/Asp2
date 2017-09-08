@@ -10,83 +10,88 @@ using System.Threading.Tasks;
 
 namespace InMemDb.Services
 {
-    //public class CartService: ICartService
-    //{
-    //    private readonly ApplicationDbContext _context;
+    public class CartService : ICartService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private ISession _session => _contextAccessor.HttpContext.Session;
 
-    //    public CartService(ApplicationDbContext context)
-    //    {
-    //        _context = context;
-    //        //_applicationUser = ApplicationUser;
-    //    }
 
-    //    public async Task<Cart> AddToExistingCart(int dishId, string cartId)
-    //    {
-    //        Cart userCart = new Cart();
-    //        CartItem cartItem = new CartItem();
-    //        //List<CartItem> cartItems;
-    //        List<CartItemIngredient> cartItemIngredients = new List<CartItemIngredient>();
+        public CartService(ApplicationDbContext context, IHttpContextAccessor contextAccessor)
+        {
+            _context = context;
+            _contextAccessor = contextAccessor;
+            //_applicationUser = ApplicationUser;
+        }
 
-    //        var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.DishId == dishId);
-    //        //var cartItemIng = new List<CartItemIngredient>();
+        public async Task<Cart> AddToExistingCart(int dishId)
+        {
+            var cartId = _session.GetInt32("Cart");
+            var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).FirstOrDefault(x => x.CartId == cartId);
 
-    //        foreach (var ing in dish.DishIngredients)
-    //        {
-    //            var cartItemIngredient = new CartItemIngredient()
-    //            {
-    //                Ingredient = ing.Ingredient,
-    //                IngredientId = ing.IngredientId,
-    //                CartItem = cartItem,
-    //                CartItemId = cartItem.CartItemId
-    //            };
-    //            cartItemIngredients.Add(cartItemIngredient);
-    //        }
+            CartItem cartItem = new CartItem();
+            List<CartItemIngredient> cartItemIngredients = new List<CartItemIngredient>();
+            var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.DishId == dishId);
 
-    //        cartItem.Dish = dish;
-    //        cartItem.Quantity = 1;
-    //        cartItem.CartItemIngredient = cartItemIngredients;
-    //        cartItem.CartId = userCart.CartId;
+            foreach (var ing in dish.DishIngredients)
+            {
+                var cartItemIngredient = new CartItemIngredient()
+                {
+                    Ingredient = ing.Ingredient,
+                    IngredientId = ing.IngredientId,
+                    CartItem = cartItem,
+                    CartItemId = cartItem.CartItemId
+                };
+                cartItemIngredients.Add(cartItemIngredient);
+            }
 
-    //        await _context.SaveChangesAsync();
+            cartItem.DishName = dish.Name;
+            cartItem.DishPrice = dish.Price;
+            cartItem.Quantity = 1;
+            cartItem.CartItemIngredient = cartItemIngredients;
+            cartItem.CartId = cart.CartId;
+            cart.CartItem.Add(cartItem);
+            await _context.CartItems.AddAsync(cartItem);
+            await _context.SaveChangesAsync();
+            //_session.SetInt32("Cart", cartId);
 
-    //        return (null);
-    //    }
+            return (null);
+        }
 
-    //    public async Task<Cart> NewCart(int dishId)
-    //    {
-    //        var cartId = Guid.NewGuid().ToString();
+        public async Task<Cart> NewCart(int dishId)
+        {
+            Cart userCart = new Cart();
+            CartItem cartItem = new CartItem();
+            List<CartItemIngredient> cartItemIngredients = new List<CartItemIngredient>();
+            userCart.CartItem = new List<CartItem>();
+            var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.DishId == dishId);
 
-    //        //HttpContext.Session.GetInt32()
+            foreach (var ing in dish.DishIngredients)
+            {
+                var cartItemIngredient = new CartItemIngredient()
+                {
+                    Ingredient = ing.Ingredient,
+                    IngredientId = ing.IngredientId,
+                    CartItem = cartItem,
+                    CartItemId = cartItem.CartItemId
+                };
+                cartItemIngredients.Add(cartItemIngredient);
+            }
 
-    //        Cart userCart = new Cart();
-    //        CartItem cartItem = new CartItem();
-    //        //List<CartItem> cartItems;
-    //        List<CartItemIngredient> cartItemIngredients = new List<CartItemIngredient>();
+            cartItem.DishName = dish.Name;
+            cartItem.DishPrice = dish.Price;
+            cartItem.Quantity = 1;
+            cartItem.CartItemIngredient = cartItemIngredients;
+            cartItem.CartId = userCart.CartId;
+            userCart.CartItem.Add(cartItem);
+            await _context.CartItems.AddAsync(cartItem);
+            await _context.Carts.AddAsync(userCart);
+            await _context.SaveChangesAsync();
+            var cartId = userCart.CartId;
+            _session.SetInt32("Cart", cartId);
 
-    //        var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.DishId == dishId);
-    //        //var cartItemIng = new List<CartItemIngredient>();
+            return null;
+        }
 
-    //        foreach (var ing in dish.DishIngredients)
-    //        {
-    //            var cartItemIngredient = new CartItemIngredient()
-    //            {
-    //                Ingredient = ing.Ingredient,
-    //                IngredientId = ing.IngredientId,
-    //                CartItem = cartItem,
-    //                CartItemId = cartItem.CartItemId
-    //            };
-    //            cartItemIngredients.Add(cartItemIngredient);
-    //        }
-
-    //        cartItem.Dish = dish;
-    //        cartItem.Quantity = 1;
-    //        cartItem.CartItemIngredient = cartItemIngredients;
-    //        cartItem.CartId = userCart.CartId;
-
-    //        await _context.SaveChangesAsync();
-
-    //        return null;
-    //    }
-
-    //}
+    }
 }

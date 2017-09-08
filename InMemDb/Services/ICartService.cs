@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace InMemDb.Services
 {
-    //public interface ICartService
-    //{
-    //    Task<Cart> AddToExistingCart(int dishId, string cartId);
-    //    Task<Cart> NewCart(int dishId);
-    //}
+    public interface ICartService
+    {
+        Task<Cart> AddToExistingCart(int dishId);
+        Task<Cart> NewCart(int dishId);
+    }
 }
