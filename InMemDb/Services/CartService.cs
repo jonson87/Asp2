@@ -45,11 +45,12 @@ namespace InMemDb.Services
                 cartItemIngredients.Add(cartItemIngredient);
             }
 
-            cartItem.DishName = dish.Name;
-            cartItem.DishPrice = dish.Price;
+            cartItem.Name = dish.Name;
+            cartItem.Price = dish.Price;
             cartItem.Quantity = 1;
             cartItem.CartItemIngredient = cartItemIngredients;
             cartItem.CartId = cart.CartId;
+            cartItem.DishId = dish.DishId;
             cart.CartItem.Add(cartItem);
             await _context.CartItems.AddAsync(cartItem);
             await _context.SaveChangesAsync();
@@ -78,11 +79,13 @@ namespace InMemDb.Services
                 cartItemIngredients.Add(cartItemIngredient);
             }
 
-            cartItem.DishName = dish.Name;
-            cartItem.DishPrice = dish.Price;
+            cartItem.Name = dish.Name;
+            cartItem.Price = dish.Price;
             cartItem.Quantity = 1;
             cartItem.CartItemIngredient = cartItemIngredients;
             cartItem.CartId = userCart.CartId;
+            cartItem.DishOriginalPrice = dish.Price;
+            cartItem.DishId = dish.DishId;
             userCart.CartItem.Add(cartItem);
             await _context.CartItems.AddAsync(cartItem);
             await _context.Carts.AddAsync(userCart);

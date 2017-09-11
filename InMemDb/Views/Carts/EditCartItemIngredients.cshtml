@@ -11,6 +11,7 @@
         <form asp-action="EditCartItemIngredients">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CartItemId" />
+            <input type="hidden" asp-for="CartItem.DishOriginalPrice" />
             @*<div class="form-group">
                 <label asp-for="CartItem." class="control-label"></label>
             </div>
@@ -24,7 +25,9 @@
                         <div class="checkbox">
                             <input asp-for="@Model.AllIngredients[i].Checked" type="checkbox" />
                             <label asp-for="@Model.AllIngredients[i]">@Model.AllIngredients[i].Name</label>
+                            <label asp-for="@Model.AllIngredients[i]">@Model.AllIngredients[i].IngredientPrice kr</label>
                             <input asp-for="@Model.AllIngredients[i].IngredientId" type="hidden" />
+                            <input asp-for="@Model.AllIngredients[i].IngredientPrice" type="hidden" />
                             <input asp-for="@Model.AllIngredients[i].Name" type="hidden" />
                         </div>
                     }

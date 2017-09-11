@@ -30,7 +30,7 @@ namespace InMemDb.ViewComponents
             {
                 return View();
             }
-            var cart =  _context.Carts.Include(x => x.CartItem).FirstOrDefault(x => x.CartId == cartId);
+            var cart = await _context.Carts.Include(x => x.CartItem).FirstOrDefaultAsync(x => x.CartId == cartId);
             int dishCount = 0;
             foreach (var dish in _context.Carts.Include(x => x.CartItem).FirstOrDefault(x => x.CartId == cartId).CartItem)
             {

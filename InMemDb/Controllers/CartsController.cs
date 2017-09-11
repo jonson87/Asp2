@@ -39,10 +39,10 @@ namespace InMemDb.Controllers
         {
             var total = 0;
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
-            var cart = _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.CartId == cartId);
+            var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).ThenInclude(x=>x.Ingredient).FirstOrDefaultAsync(x => x.CartId == cartId);
             foreach (var item in cart.CartItem)
             {
-                total += item.DishPrice;
+                total += item.Price;
             }
             cart.CartTotal = total;
             return View(cart);
@@ -67,20 +67,25 @@ namespace InMemDb.Controllers
             var viewModel = new EditCartViewModel();
             //var cartId = (int)HttpContext.Session.GetInt32("Cart");
             var cartItem = await _context.CartItems.Include(x => x.CartItemIngredient).FirstOrDefaultAsync(x => x.CartItemId == cartItemId);
+            var dish = await _context.Dishes.Include(x=>x.DishIngredients).FirstOrDefaultAsync(x => x.DishId == cartItem.DishId);
+            cartItem.DishOriginalPrice = dish.Price;
             viewModel.CartItem = cartItem;
             viewModel.AllIngredients = _context.Ingredients.ToList();
 
-            foreach (var ing in cartItem.CartItemIngredient)
+            foreach (var aIng in viewModel.AllIngredients)
             {
-                foreach (var aIng in viewModel.AllIngredients)
+                foreach (var ing in cartItem.CartItemIngredient)
                 {
                     if (ing.IngredientId == aIng.IngredientId)
                     {
                         aIng.Checked = true;
+                        if (dish.DishIngredients.Any(x=>x.IngredientId == aIng.IngredientId))
+                        {
+                            aIng.IngredientPrice = 0;
+                        }
                     }
                 }
             }
-
             return View(viewModel);
         }
 
@@ -93,7 +98,19 @@ namespace InMemDb.Controllers
             }
             await _context.SaveChangesAsync();
 
-            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked).Any(x => x.IngredientId == i.IngredientId)).ToList();
+            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked)
+                .Any(x => x.IngredientId == i.IngredientId)).ToList();
+
+            foreach (var ing in model.AllIngredients)
+            {
+                foreach (var cIng in checkedIngredients.Where(x=>x.IngredientId == ing.IngredientId))
+                {
+                    cIng.IngredientPrice = ing.IngredientPrice;
+                }
+            }
+
+            var cartItem = await _context.CartItems.Include(x => x.CartItemIngredient).FirstOrDefaultAsync(x => x.CartItemId == model.CartItemId);
+            cartItem.Price = model.CartItem.DishOriginalPrice;
 
             foreach (var ing in checkedIngredients)
             {
@@ -102,12 +119,21 @@ namespace InMemDb.Controllers
                     Ingredient = ing,
                     IngredientId = ing.IngredientId,
                     CartItem = model.CartItem,
-                    CartItemId = model.CartItemId
+                    CartItemId = model.CartItemId,
                 };
+                
+                cartItem.Price += ing.IngredientPrice;
+                _context.Update(cartItem);
                 _context.CartItemIngredients.Add(cartItemIngredient);
             }
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Cart");
+        }
+
+        public async Task<bool> OriginalDishIngredient(int dishId, int ingredientId)
+        {
+            return await _context.DishIngredients.AnyAsync(di => di.DishId == dishId && di.IngredientId == ingredientId);
         }
 
         public async Task<IActionResult> DeleteCartItem(int cartItemId)
