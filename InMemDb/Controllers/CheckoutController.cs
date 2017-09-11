@@ -58,8 +58,17 @@ namespace InMemDb.Controllers
 
                 await _context.AddAsync(order);
                 await _context.SaveChangesAsync();
+                return View("CheckoutConfirmation", order);
             }
             return View();
+        }
+
+        public async Task<IActionResult> CheckoutConfirmation(int orderId)
+        {
+             var order = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
+             return View(order);
+            
+            
         }
     }
 }

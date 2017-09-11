@@ -69,7 +69,7 @@ namespace InMemDb.Controllers
                 {
                     Name = viewModel.Name,
                     Price = viewModel.Price,
-                    CategoryId = viewModel.Category.CategoryId
+                    CategoryId = viewModel.CategoryId
                 };
                 _context.Add(createdDish);
 
@@ -95,11 +95,12 @@ namespace InMemDb.Controllers
         public IActionResult Edit(int? id)
         {
             var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x=>x.Ingredient).FirstOrDefault(x => x.DishId == id);
-
+            var allCategories = _context.Categories.ToList();
             var model = new CreateEditDishViewModel()
             {
                 AllIngredients = _context.Ingredients.ToList(),
-                Dish = dish
+                Dish = dish,
+                AllCategories = allCategories
             };
 
             foreach (var ing in dish.DishIngredients)
@@ -121,7 +122,7 @@ namespace InMemDb.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Dish,AllIngredients")] CreateEditDishViewModel model)
+        public async Task<IActionResult> Edit(int id, [Bind("Dish,AllIngredients,CategoryId")] CreateEditDishViewModel model)
         {
             var dish = _context.Dishes
                     .Include(x => x.DishIngredients)
@@ -152,6 +153,7 @@ namespace InMemDb.Controllers
 
             dish.Name = model.Dish.Name;
             dish.Price = model.Dish.Price;
+            dish.CategoryId = model.CategoryId;
             _context.Entry(dish).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
