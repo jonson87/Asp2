@@ -26,6 +26,28 @@ namespace InMemDb.Controllers
         }
 
         // GET: Ingredients/Create
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View(await _context.Ingredients.FirstOrDefaultAsync(x=>x.IngredientId == id));
+        }
+
+        // POST: Ingredients/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("IngredientId,Name,IngredientPrice")] Ingredient ingredient)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(ingredient);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(ingredient);
+        }
+
+        // GET: Ingredients/Create
         public IActionResult Create()
         {
             return View();

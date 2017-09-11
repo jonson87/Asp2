@@ -8,6 +8,7 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+    
 </p>
 <table class="table">
     <thead>
@@ -26,6 +27,7 @@
             </td>
             <td>
                 <a asp-action="Delete" asp-route-id="@item.IngredientId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IngredientId">Edit</a>
             </td>
         </tr>
 }
