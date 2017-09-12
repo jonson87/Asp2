@@ -10,6 +10,10 @@
     <DefineConstants>TRACE;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0;LOCALIIS;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\BennysPizza - Web Deploy.pubxml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />

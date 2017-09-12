@@ -26,7 +26,7 @@ namespace InMemDb.ViewComponents
         {
 
             var cartId = _session.GetInt32("Cart");
-            if (cartId == null)
+            if (cartId == null || cartId == 0)
             {
                 return View();
             }

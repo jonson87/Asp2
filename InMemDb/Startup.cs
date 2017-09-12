@@ -29,6 +29,9 @@ namespace InMemDb
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("DefaultConnection"));
 
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -78,6 +81,8 @@ namespace InMemDb
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             DbInitializer.Initialize(context, userManager, roleManager);
+
+            //context.Database.Migrate();
         }
     }
 }

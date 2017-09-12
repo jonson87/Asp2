@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using InMemDb.Data;
 using InMemDb.Models;
 using InMemDb.Models.CheckOutViewModel;
+using InMemDb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,11 +18,13 @@ namespace InMemDb.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public CheckoutController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public CheckoutController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -58,6 +61,8 @@ namespace InMemDb.Controllers
 
                 await _context.AddAsync(order);
                 await _context.SaveChangesAsync();
+                await _emailSender.SendEmailAsync("Mottagare", "Ämne", "Meddelande");
+                HttpContext.Session.SetInt32("Cart", 0);
                 return View("CheckoutConfirmation", order);
             }
             return View();

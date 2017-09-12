@@ -46,6 +46,7 @@ namespace InMemDb.Controllers
         public string StatusMessage { get; set; }
 
         [HttpGet]
+        [Authorize(Roles ="User")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -53,6 +54,7 @@ namespace InMemDb.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+            
 
             var model = new IndexViewModel
             {
