@@ -19,13 +19,13 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="Category.CategoryId" class="form-control">
+                <select asp-for="CategoryId" class="form-control">
                     @foreach (var cat in Model.AllCategories)
                     {
                         <option value="@cat.CategoryId">@cat.Name</option>
                     }
                 </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>      
             <div class="form-group">
                 @{

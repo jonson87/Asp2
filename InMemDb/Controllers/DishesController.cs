@@ -61,7 +61,7 @@ namespace InMemDb.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients, Category")] CreateEditDishViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Name, Price, DishIngredients, AllIngredients, CategoryId")] CreateEditDishViewModel viewModel)
          {
             if (ModelState.IsValid)
             {
