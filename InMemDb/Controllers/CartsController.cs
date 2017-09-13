@@ -37,15 +37,22 @@ namespace InMemDb.Controllers
         // GET: Carts
         public async Task<IActionResult> Cart(int dishId)
         {
-            var total = 0;
-            var cartId = (int)HttpContext.Session.GetInt32("Cart");
-            var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient).ThenInclude(x=>x.Ingredient).FirstOrDefaultAsync(x => x.CartId == cartId);
-            foreach (var item in cart.CartItem)
+            if (HttpContext.Session.GetInt32("Cart") != null)
             {
-                total += item.Price;
+                var cartId = (int) HttpContext.Session.GetInt32("Cart");
+                var total = 0;
+                var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient)
+                    .ThenInclude(x => x.Ingredient).FirstOrDefaultAsync(x => x.CartId == cartId);
+                foreach (var item in cart.CartItem)
+                {
+                    total += item.Price;
+                }
+                cart.CartTotal = total;
+
+
+                return View(cart);
             }
-            cart.CartTotal = total;
-            return View(cart);
+            return View("EmptyCart");
         }
 
         public async Task<IActionResult> AddToCart(int dishId)

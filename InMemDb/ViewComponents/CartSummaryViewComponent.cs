@@ -24,7 +24,6 @@ namespace InMemDb.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-
             var cartId = _session.GetInt32("Cart");
             if (cartId == null || cartId == 0)
             {
