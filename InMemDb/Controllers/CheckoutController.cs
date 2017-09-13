@@ -61,7 +61,7 @@ namespace InMemDb.Controllers
 
                 await _context.AddAsync(order);
                 await _context.SaveChangesAsync();
-                await _emailSender.SendEmailAsync("Mottagare", "Ämne", "Meddelande");
+                await _emailSender.SendEmailAsync(checkoutViewModel.User.Email, "Your Order", "Thank you for using our site. Your order has been placed and will be delivered to you shortly");
                 HttpContext.Session.SetInt32("Cart", 0);
                 return View("CheckoutConfirmation", order);
             }

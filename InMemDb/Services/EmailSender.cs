@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace InMemDb.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
+            Debug.WriteLine($"Confirmation email sent to {email}, with subject: \"{subject}\" and message \"{message}\"");
             return Task.CompletedTask;
         }
     }
