@@ -96,5 +96,15 @@ namespace InMemDb.Services
             return null;
         }
 
+        public async Task<Cart> GetCart(int dishId)
+        {
+            var cartId = _session.GetInt32("Cart");
+            var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient)
+                .ThenInclude(x => x.Ingredient).FirstOrDefaultAsync(x => x.CartId == cartId);
+            var total = cart.CartItem.Sum(item => item.Price);
+            cart.CartTotal = total;
+            return cart;
+        }
+
     }
 }

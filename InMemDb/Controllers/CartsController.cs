@@ -18,20 +18,12 @@ namespace InMemDb.Controllers
     public class CartsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private readonly ApplicationUser _applicationUser;
-        //private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
-        //private readonly UserManager userManager;
         private readonly ICartService _cartService;
 
         public CartsController(ApplicationDbContext context, ICartService cartService)
         {
             _context = context;
-            //_applicationUser = applicationUser;
-            //_userManager = userManager;
-            //_signInManager = signInManager;
             _cartService = cartService;
-            //_applicationUser = ApplicationUser;
         }
 
         // GET: Carts
@@ -39,18 +31,7 @@ namespace InMemDb.Controllers
         {
             if (HttpContext.Session.GetInt32("Cart") != null)
             {
-                var cartId = (int) HttpContext.Session.GetInt32("Cart");
-                var total = 0;
-                var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient)
-                    .ThenInclude(x => x.Ingredient).FirstOrDefaultAsync(x => x.CartId == cartId);
-                foreach (var item in cart.CartItem)
-                {
-                    total += item.Price;
-                }
-                cart.CartTotal = total;
-
-
-                return View(cart);
+                return View(await _cartService.GetCart(dishId));
             }
             return View("EmptyCart");
         }

@@ -73,7 +73,6 @@ namespace InMemDb.Controllers
              var order = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
              return View(order);
             
-            
         }
     }
 }
