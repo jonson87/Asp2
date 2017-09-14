@@ -96,7 +96,7 @@ namespace InMemDb.Services
             return null;
         }
 
-        public async Task<Cart> GetCart(int dishId)
+        public async Task<Cart> GetCart()
         {
             var cartId = _session.GetInt32("Cart");
             var cart = await _context.Carts.Include(x => x.CartItem).ThenInclude(x => x.CartItemIngredient)

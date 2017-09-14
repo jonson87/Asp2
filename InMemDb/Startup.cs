@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using InMemDb.Data;
 using InMemDb.Models;
 using InMemDb.Services;
+using Microsoft.Extensions.Logging;
 
 namespace InMemDb
 {
@@ -26,11 +27,11 @@ namespace InMemDb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("DefaultConnection"));
-
             //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //    options.UseInMemoryDatabase("DefaultConnection"));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -55,8 +56,11 @@ namespace InMemDb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddAzureWebAppDiagnostics();
+            loggerFactory.AddConsole();
+            loggerFactory.AddDebug();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,9 +84,10 @@ namespace InMemDb
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            DbInitializer.Initialize(context, userManager, roleManager);
-
             //context.Database.Migrate();
+            //context.Database.EnsureCreated();
+            DbInitializer.Initialize(context, userManager, roleManager);
+            
         }
     }
 }

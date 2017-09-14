@@ -15,6 +15,11 @@ namespace InMemDb.Data
             var aUser = new ApplicationUser();
             aUser.UserName = "student@test.com";
             aUser.Email = "student@test.com";
+            aUser.City = "Nacka";
+            aUser.Firstname = "Erik";
+            aUser.Lastname = "Jonson";
+            aUser.ZipCode = "13136";
+            aUser.Street = "Gatan";
             var r = userManager.CreateAsync(aUser, "Pa$$w0rd").Result;
 
             var adminRole = new IdentityRole { Name = "Admin" };
@@ -23,9 +28,14 @@ namespace InMemDb.Data
             var adminUser = new ApplicationUser();
             adminUser.UserName = "admin@test.com";
             adminUser.Email = "admin@test.com";
+            adminUser.City = "Nacka";
+            adminUser.Firstname = "Erik";
+            adminUser.Lastname = "Jonson";
+            adminUser.ZipCode = "13136";
+            adminUser.Street = "Gatan";
             var adminUserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
 
-            userManager.AddToRoleAsync(adminUser, "Admin");
+            userManager.AddToRoleAsync(adminUser, "Admin").Wait();
 
             if (context.Dishes.ToList().Count == 0)
             {

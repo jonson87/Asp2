@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace InMemDb.Data.Migrations
+namespace InMemDb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170912105124_firstmigration")]
+    [Migration("20170914125129_firstmigration")]
     partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,7 @@ namespace InMemDb.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("City")
-                        .IsRequired();
+                    b.Property<string>("City");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -39,11 +38,9 @@ namespace InMemDb.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("Firstname")
-                        .IsRequired();
+                    b.Property<string>("Firstname");
 
-                    b.Property<string>("Lastname")
-                        .IsRequired();
+                    b.Property<string>("Lastname");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -63,16 +60,14 @@ namespace InMemDb.Data.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<string>("Street")
-                        .IsRequired();
+                    b.Property<string>("Street");
 
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("ZipCode")
-                        .IsRequired();
+                    b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
 

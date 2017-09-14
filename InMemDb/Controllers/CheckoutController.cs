@@ -57,6 +57,11 @@ namespace InMemDb.Controllers
                     Cart = _context.Carts.FirstOrDefault(x=>x.CartId == checkoutViewModel.Cart.CartId),
                     User = checkoutViewModel.User,
                     TimeOfOrder = DateTime.Now,
+                    City = checkoutViewModel.User.City,
+                    Firstname = checkoutViewModel.User.Firstname,
+                    Lastname = checkoutViewModel.User.Lastname,
+                    ZipCode = checkoutViewModel.User.ZipCode,
+                    Street = checkoutViewModel.User.Street
                 };
 
                 await _context.AddAsync(order);

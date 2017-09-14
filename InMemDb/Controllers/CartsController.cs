@@ -27,18 +27,18 @@ namespace InMemDb.Controllers
         }
 
         // GET: Carts
-        public async Task<IActionResult> Cart(int dishId)
+        public async Task<IActionResult> Cart()
         {
-            if (HttpContext.Session.GetInt32("Cart") != null)
+            if (HttpContext.Session.GetInt32("Cart") != 0 && HttpContext.Session.GetInt32("Cart") != null)
             {
-                return View(await _cartService.GetCart(dishId));
+                return View(await _cartService.GetCart());
             }
             return View("EmptyCart");
         }
 
         public async Task<IActionResult> AddToCart(int dishId)
         {
-            if (HttpContext.Session.GetInt32("Cart") == null)
+            if (HttpContext.Session.GetInt32("Cart") == 0 || HttpContext.Session.GetInt32("Cart") == null)
             {
                 await _cartService.NewCart(dishId);
             }

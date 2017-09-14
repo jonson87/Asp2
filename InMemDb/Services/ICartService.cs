@@ -10,6 +10,6 @@ namespace InMemDb.Services
     {
         Task<Cart> AddToExistingCart(int dishId);
         Task<Cart> NewCart(int dishId);
-        Task<Cart> GetCart(int dishId);
+        Task<Cart> GetCart();
     }
 }

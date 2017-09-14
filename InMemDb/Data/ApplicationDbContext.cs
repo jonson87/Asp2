@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using InMemDb.Models;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace InMemDb.Data
 {
@@ -51,7 +52,7 @@ namespace InMemDb.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public virtual DbSet<Dish> Dishes { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Categories { get; set; }
