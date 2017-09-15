@@ -31,21 +31,28 @@ namespace InMemDb.Controllers
         {
             if (HttpContext.Session.GetInt32("Cart") != 0 && HttpContext.Session.GetInt32("Cart") != null)
             {
-                return View(await _cartService.GetCart());
+                return View(await _cartService.GetCart(HttpContext));
             }
             return View("EmptyCart");
         }
 
         public async Task<IActionResult> AddToCart(int dishId)
         {
+            var dish = _context.Dishes.Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.DishId == dishId);
+            int cartId;
+
             if (HttpContext.Session.GetInt32("Cart") == 0 || HttpContext.Session.GetInt32("Cart") == null)
             {
-                await _cartService.NewCart(dishId);
+                var cart = await _cartService.NewCart(dish);
+                cartId = cart.CartId;
             }
             else
             {
-                await _cartService.AddToExistingCart(dishId);
+                cartId = (int)HttpContext.Session.GetInt32("Cart");
+                var updatedCart = await _cartService.AddToExistingCart(HttpContext, dish);
             }
+            HttpContext.Session.SetInt32("Cart", cartId);
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -80,42 +87,7 @@ namespace InMemDb.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCartItemIngredients(EditCartViewModel model)
         {
-            foreach (var cii in _context.CartItemIngredients.Where(x=>x.CartItemId == model.CartItemId))
-            {
-                 _context.Remove(cii);
-            }
-            await _context.SaveChangesAsync();
-
-            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked)
-                .Any(x => x.IngredientId == i.IngredientId)).ToList();
-
-            foreach (var ing in model.AllIngredients)
-            {
-                foreach (var cIng in checkedIngredients.Where(x=>x.IngredientId == ing.IngredientId))
-                {
-                    cIng.IngredientPrice = ing.IngredientPrice;
-                }
-            }
-
-            var cartItem = await _context.CartItems.Include(x => x.CartItemIngredient).FirstOrDefaultAsync(x => x.CartItemId == model.CartItemId);
-            cartItem.Price = model.CartItem.DishOriginalPrice;
-
-            foreach (var ing in checkedIngredients)
-            {
-                var cartItemIngredient = new CartItemIngredient()
-                {
-                    Ingredient = ing,
-                    IngredientId = ing.IngredientId,
-                    CartItem = model.CartItem,
-                    CartItemId = model.CartItemId,
-                };
-                
-                cartItem.Price += ing.IngredientPrice;
-                _context.Update(cartItem);
-                _context.CartItemIngredients.Add(cartItemIngredient);
-            }
-
-            await _context.SaveChangesAsync();
+            await _cartService.EditCartItemIngredients(model);
             return RedirectToAction("Cart");
         }
 
