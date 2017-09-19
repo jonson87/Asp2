@@ -112,7 +112,7 @@ namespace InMemDb.Controllers
             _context.CartItems.Remove(cartItem);
             await _context.SaveChangesAsync();
 
-            return View("Cart");
+            return RedirectToAction("Cart");
         }
     }
 }
