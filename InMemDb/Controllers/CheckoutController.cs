@@ -43,6 +43,7 @@ namespace InMemDb.Controllers
             checkoutViewModel.User = await _userManager.GetUserAsync(User);
             
             checkoutViewModel.Cart = cart;
+            checkoutViewModel.Cart.CartTotal = cart.CartItem.Sum(x => x.Price);
             return View(checkoutViewModel);
         }
 
@@ -57,6 +58,7 @@ namespace InMemDb.Controllers
                     Cart = _context.Carts.FirstOrDefault(x=>x.CartId == checkoutViewModel.Cart.CartId),
                     User = checkoutViewModel.User,
                     TimeOfOrder = DateTime.Now,
+                    CartTotal = checkoutViewModel.Cart.CartTotal,
                     City = checkoutViewModel.User.City,
                     Firstname = checkoutViewModel.User.Firstname,
                     Lastname = checkoutViewModel.User.Lastname,
@@ -67,7 +69,7 @@ namespace InMemDb.Controllers
                 await _context.AddAsync(order);
                 await _context.SaveChangesAsync();
                 await _emailSender.SendEmailAsync(checkoutViewModel.User.Email, "Your Order", "Thank you for using our site. Your order has been placed and will be delivered to you shortly");
-                HttpContext.Session.SetInt32("Cart", 0);
+                HttpContext.Session.Remove("Cart");
                 return View("CheckoutConfirmation", order);
             }
             return View();
