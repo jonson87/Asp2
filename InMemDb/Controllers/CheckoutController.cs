@@ -38,6 +38,7 @@ namespace InMemDb.Controllers
             if (await _userManager.GetUserAsync(User) == null)
             {
                 checkoutViewModel.Cart = cart;
+                checkoutViewModel.Cart.CartTotal = cart.CartItem.Sum(x => x.Price);
                 return View(checkoutViewModel);
             }
             checkoutViewModel.User = await _userManager.GetUserAsync(User);

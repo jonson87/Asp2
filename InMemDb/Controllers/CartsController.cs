@@ -66,21 +66,53 @@ namespace InMemDb.Controllers
             cartItem.DishOriginalPrice = dish.Price;
             viewModel.CartItem = cartItem;
             viewModel.AllIngredients = _context.Ingredients.OrderBy(x=>x.Name).ToList();
-
+            var cartItemIngredients = new List<CartItemIngredient>();
             foreach (var aIng in viewModel.AllIngredients)
             {
-                foreach (var ing in cartItem.CartItemIngredient)
+                var cartItemIngredient = new CartItemIngredient();
+
+                if (cartItem.CartItemIngredient.Any(x => x.IngredientId == aIng.IngredientId))
                 {
-                    if (ing.IngredientId == aIng.IngredientId)
-                    {
-                        aIng.Checked = true;
-                        if (dish.DishIngredients.Any(x=>x.IngredientId == aIng.IngredientId))
-                        {
-                            aIng.IngredientPrice = 0;
-                        }
-                    }
+                    cartItemIngredient.Checked = true;
+                    cartItemIngredient.CartItemIngredientPrice = 0;
+                    cartItemIngredient.Ingredient = aIng;
+                    cartItemIngredient.CartItem = cartItem;
+                    cartItemIngredient.IngredientId = aIng.IngredientId;
+                    cartItemIngredient.CartItemId = cartItem.CartItemId;
                 }
+                else
+                {
+                    cartItemIngredient.CartItemIngredientPrice = aIng.IngredientPrice;
+                    cartItemIngredient.Checked = false;
+                    cartItemIngredient.Ingredient = aIng;
+                    cartItemIngredient.CartItem = cartItem;
+                    cartItemIngredient.IngredientId = aIng.IngredientId;
+                    cartItemIngredient.CartItemId = cartItem.CartItemId;
+                }
+                //foreach (var ing in cartItem.CartItemIngredient)
+                //{
+                //    if ()
+                //    {
+                //        cartItemIngredient.Checked = true;
+                //        cartItemIngredient.CartItemIngredientPrice = 0;
+                //        cartItemIngredient.Ingredient = aIng;
+                //        cartItemIngredient.CartItem = cartItem;
+                //        cartItemIngredient.IngredientId = aIng.IngredientId;
+                //        cartItemIngredient.CartItemId = cartItem.CartItemId;
+                //    }
+                //    else
+                //    {
+                //    cartItemIngredient.CartItemIngredientPrice = aIng.IngredientPrice;
+                //    cartItemIngredient.Checked = false;
+                //    cartItemIngredient.Ingredient = aIng;
+                //    cartItemIngredient.CartItem = cartItem;
+                //    cartItemIngredient.IngredientId = aIng.IngredientId;
+                //    cartItemIngredient.CartItemId = cartItem.CartItemId;
+                //    }
+                //}
+                cartItemIngredients.Add(cartItemIngredient);
             }
+            viewModel.CartItemIngredients = cartItemIngredients;
             return View(viewModel);
         }
 

@@ -19,7 +19,6 @@ namespace InMemDb.Services
         public CartService(ApplicationDbContext context)
         {
             _context = context;
-            //_applicationUser = ApplicationUser;
         }
 
         public async Task<Cart> AddToExistingCart(HttpContext context, Dish dish)
@@ -37,7 +36,9 @@ namespace InMemDb.Services
                     Ingredient = ing.Ingredient,
                     IngredientId = ing.IngredientId,
                     CartItem = cartItem,
-                    CartItemId = cartItem.CartItemId
+                    CartItemId = cartItem.CartItemId,
+                    Checked = true,
+                    CartItemIngredientPrice = ing.Ingredient.IngredientPrice
                 };
                 cartItemIngredients.Add(cartItemIngredient);
             }
@@ -51,7 +52,6 @@ namespace InMemDb.Services
             cart.CartItem.Add(cartItem);
             await _context.CartItems.AddAsync(cartItem);
             await _context.SaveChangesAsync();
-            //_session.SetInt32("Cart", cartId);
 
             return cart;
         }
@@ -70,7 +70,9 @@ namespace InMemDb.Services
                     Ingredient = ing.Ingredient,
                     IngredientId = ing.IngredientId,
                     CartItem = cartItem,
-                    CartItemId = cartItem.CartItemId
+                    Checked = true,
+                    CartItemId = cartItem.CartItemId,
+                    CartItemIngredientPrice = ing.Ingredient.IngredientPrice
                 };
                 cartItemIngredients.Add(cartItemIngredient);
             }
@@ -87,7 +89,6 @@ namespace InMemDb.Services
             await _context.Carts.AddAsync(userCart);
             await _context.SaveChangesAsync();
             var cartId = userCart.CartId;
-            //_session.SetInt32("Cart", cartId);
 
             return userCart;
         }
@@ -110,20 +111,20 @@ namespace InMemDb.Services
             }
             await _context.SaveChangesAsync();
 
-            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.AllIngredients.Where(y => y.Checked)
+            List<Ingredient> checkedIngredients = _context.Ingredients.Where(i => model.CartItemIngredients.Where(y => y.Checked)
                 .Any(x => x.IngredientId == i.IngredientId)).ToList();
 
-            foreach (var ing in model.AllIngredients)
-            {
-                foreach (var cIng in checkedIngredients.Where(x => x.IngredientId == ing.IngredientId))
-                {
-                    cIng.IngredientPrice = ing.IngredientPrice;
-                }
-            }
+            //foreach (var ing in model.CartItemIngredients)
+            //{
+            //    foreach (var cIng in checkedIngredients.Where(x => x.IngredientId == ing.IngredientId))
+            //    {
+            //        cIng.IngredientPrice = ing.CartItemIngredientPrice;
+            //    }
+            //}
 
             var cartItem = await _context.CartItems.Include(x => x.CartItemIngredient).FirstOrDefaultAsync(x => x.CartItemId == model.CartItemId);
             cartItem.Price = model.CartItem.DishOriginalPrice;
-
+            var price = 0;
             foreach (var ing in checkedIngredients)
             {
                 var cartItemIngredient = new CartItemIngredient()
@@ -133,14 +134,26 @@ namespace InMemDb.Services
                     CartItem = model.CartItem,
                     CartItemId = model.CartItemId,
                 };
+                if (await OriginalDishHasIngredients(cartItem.DishId, ing.IngredientId))
+                {
+                    cartItemIngredient.CartItemIngredientPrice = 0;
+                }
+                else
+                {
+                    cartItemIngredient.CartItemIngredientPrice = ing.IngredientPrice;
+                    price += ing.IngredientPrice;
+                }
 
-                cartItem.Price += ing.IngredientPrice;
-                _context.Update(cartItem);
                 _context.CartItemIngredients.Add(cartItemIngredient);
             }
-
+            cartItem.Price += price;
             await _context.SaveChangesAsync();
             return model;
+        }
+
+        public async Task<bool> OriginalDishHasIngredients(int dishId, int ingredientId)
+        {
+            return await _context.DishIngredients.AnyAsync(x => x.DishId == dishId && x.IngredientId == ingredientId);
         }
     }
 }

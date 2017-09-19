@@ -14,15 +14,18 @@
             <input type="hidden" asp-for="CartItem.DishOriginalPrice" />
             <div class="form-group">
                 @{
-                    for (int i = 0; i < Model.AllIngredients.Count; i++)
+                    for (int i = 0; i < Model.CartItemIngredients.Count; i++)
                     {
                         <div class="checkbox">
-                            <input asp-for="@Model.AllIngredients[i].Checked" type="checkbox" />
-                            <label asp-for="@Model.AllIngredients[i]">@Model.AllIngredients[i].Name</label>
-                            <label asp-for="@Model.AllIngredients[i]">@Model.AllIngredients[i].IngredientPrice kr</label>
-                            <input asp-for="@Model.AllIngredients[i].IngredientId" type="hidden" />
-                            <input asp-for="@Model.AllIngredients[i].IngredientPrice" type="hidden" />
-                            <input asp-for="@Model.AllIngredients[i].Name" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].Checked" type="checkbox" />
+                            <label asp-for="@Model.CartItemIngredients[i]">@Model.CartItemIngredients[i].Ingredient.Name</label>
+                            <label asp-for="@Model.CartItemIngredients[i]">@Model.CartItemIngredients[i].CartItemIngredientPrice kr</label>
+                            <input asp-for="@Model.CartItemIngredients[i].Ingredient.IngredientId" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].CartItemIngredientPrice" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].CartItem" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].IngredientId" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].Ingredient.IngredientPrice" type="hidden" />
+                            <input asp-for="@Model.CartItemIngredients[i].Ingredient.Name" type="hidden" />
                         </div>
                     }
                 }
