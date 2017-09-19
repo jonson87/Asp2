@@ -12,7 +12,9 @@ namespace InMemDb.Data
 
         public static void Initialize(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            var aUser = new ApplicationUser();
+            if (context.Users.ToList().Count == 0)
+            { 
+                var aUser = new ApplicationUser();
             aUser.UserName = "student@test.com";
             aUser.Email = "student@test.com";
             aUser.City = "Nacka";
@@ -36,7 +38,7 @@ namespace InMemDb.Data
             var adminUserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
 
             userManager.AddToRoleAsync(adminUser, "Admin").Wait();
-
+            }
             if (context.Dishes.ToList().Count == 0)
             {
                 var cheese = new Ingredient { Name = "Cheese", IngredientPrice=5 };

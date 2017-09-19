@@ -58,9 +58,9 @@ namespace InMemDb.Services
 
         public async Task<Cart> NewCart(Dish dish)
         {
-            Cart userCart = new Cart();
-            CartItem cartItem = new CartItem();
-            List<CartItemIngredient> cartItemIngredients = new List<CartItemIngredient>();
+            var userCart = new Cart();
+            var cartItem = new CartItem();
+            var cartItemIngredients = new List<CartItemIngredient>();
             userCart.CartItem = new List<CartItem>();
 
             foreach (var ing in dish.DishIngredients)
@@ -140,7 +140,7 @@ namespace InMemDb.Services
             }
 
             await _context.SaveChangesAsync();
-            return null;
+            return model;
         }
     }
 }
