@@ -22,7 +22,7 @@ namespace InMemDb.Controllers
         // GET: Ingredients
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Ingredients.ToListAsync());
+            return View(await _context.Ingredients.OrderBy(x=>x.Name).ToListAsync());
         }
 
         // GET: Ingredients/Create

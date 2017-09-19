@@ -65,7 +65,7 @@ namespace InMemDb.Controllers
             var dish = await _context.Dishes.Include(x=>x.DishIngredients).FirstOrDefaultAsync(x => x.DishId == cartItem.DishId);
             cartItem.DishOriginalPrice = dish.Price;
             viewModel.CartItem = cartItem;
-            viewModel.AllIngredients = _context.Ingredients.ToList();
+            viewModel.AllIngredients = _context.Ingredients.OrderBy(x=>x.Name).ToList();
 
             foreach (var aIng in viewModel.AllIngredients)
             {
